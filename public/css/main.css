@@ -1,0 +1,33 @@
+
+@font-face {
+    font-family: brand;
+    src: url('../assets/fonts/Valery\ Demo.otf') format('woff2');
+}
+@font-face {
+    font-family: main;
+    src: url('../assets/fonts/main/Nunito-Regular.ttf') format('woff2');
+}
+@font-face {
+    font-family: main-bold;
+    src: url('../assets/fonts/main/Nunito-Bold.ttf') format('woff2');
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    /* background: var(--bg); */
+    color: var(--font);
+    font-family: main;
+}
+
+.container {
+    margin: 0 var(--space);
+}
+a {
+    text-decoration: none;
+    color: var(--font);
+}
