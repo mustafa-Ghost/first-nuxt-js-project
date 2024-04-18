@@ -1,6 +1,6 @@
 <template>
     <div class="products">
-        <div v-for="(i, index) in [...Array(2)]" class="row-container">
+        <div v-for="(i, index) in 2" class="row-container">
             <div class="container">
                 <div class="desc">
                     <p>100 Items</p>
@@ -12,7 +12,7 @@
             </div>
             <div class="products-swiper-container">
                 <swiper class="products-cards-container" :slidesPerView="4.5" :allow-touch-move="true"  :space-between="50">
-                    <swiper-slide v-for="p in products.slice(12 * index, 12 * (index + 1))" :key="p.id">
+                    <swiper-slide v-for="p in slicedProducts(index,products)" :key="p.id">
                         <ProductCard :product="p" />
                     </swiper-slide>
                 </swiper>
@@ -28,7 +28,7 @@
             </div>
             <div class="products-swiper-container">
                 <swiper class="products-cards-container" :slidesPerView="4.5" :allow-touch-move="true"  :space-between="50">
-                    <swiper-slide v-for="p in products.slice(12 * index, 12 * (index + 1))" :key="p.id">
+                    <swiper-slide v-for="p in slicedProducts(index,products)" :key="p.id">
                         <ProductCard :product="p" />
                     </swiper-slide>
                 </swiper>
@@ -36,6 +36,18 @@
         </div>
     </div>
 </template>
+<script setup>
+import { Swiper, SwiperSlide } from 'swiper/vue';
+
+const { data: products } = await useFetch('https://fakestoreapi.com/products');
+
+const slicedProducts = computed(() => (index, prds) => {
+  const start = index * 12;
+  const end = start + 12;
+  return prds.slice(start, end);
+});
+</script>
+
 <style scoped>
     .products {
         padding: 6rem 0;
@@ -69,8 +81,3 @@
         margin-top: 3rem
     }
     </style>
-<script setup>
-    const {data:products} = await useFetch('https://fakestoreapi.com/products')
-    import 'swiper/css'
-    import {Swiper, SwiperSlide} from 'swiper/vue'
-</script>

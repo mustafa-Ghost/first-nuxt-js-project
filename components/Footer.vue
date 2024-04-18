@@ -1,7 +1,7 @@
 <template>
     <footer>
             <div class="image">
-                <img src="../../public/assets/images/footer.webp" loading="lazy" alt="footer image" />
+                <img src="../public/assets/images/footer.webp" loading="lazy" alt="footer image" />
                 <div>
                     <h1>STORE NAME</h1>
                 </div>

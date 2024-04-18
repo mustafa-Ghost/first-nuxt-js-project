@@ -33,27 +33,20 @@
         </section>
     </main>
 </template>
-<script>
-    export default {
-        mounted(){
-            window.addEventListener('scroll', this.handleScroll)
-        },
-        methods:{
-            handleScroll(){
-                const y = (Math.floor(window.scrollY/6.7) + .4) * -1
-                if(y >= -17.4){
-                    this.heroTextY = y
-                }else {
-                    this.heroTextY = -17.4
-                }
-            }
-        },
-        data(){
-            return {
-                heroTextY:0
-            }
+<script setup>
+    const heroTextY = ref(0)
+    const handleScroll = () => {
+        const y = (Math.floor(window.scrollY/6.7) + .4) * -1
+        console.log(y)
+        if(y >= -17.4){
+            heroTextY.value = y
+        }else {
+            heroTextY.value = -17.4
         }
-    }
+    }  
+    onMounted(() => {
+        window.addEventListener('scroll', handleScroll)
+    })
 </script>
 <style scoped>
     .hero {

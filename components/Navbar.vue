@@ -34,20 +34,22 @@
             </div>
             <div class="side-btns">
                 <div class="cart">
-                    <Cart />
+                    <NuxtLink to="/cart">
+                        <Cart />
+                    </NuxtLink>
                 </div>
                 <div :class="{ 'sidebar-btn active': isActive, 'sidebar-btn': !isActive }" @click="() => {
                     secondSlide = false
                     toggle()
                 }">
                     <div>
-                        <img loading="lazy" src="../../public/assets/icons/line.svg" alt="line" />
+                        <img loading="lazy" src="../public/assets/icons/line.svg" alt="line" />
                     </div>
                     <div>
-                        <img loading="lazy" src="../../public/assets/icons/line.svg" alt="line" />
+                        <img loading="lazy" src="../public/assets/icons/line.svg" alt="line" />
                     </div>
                     <div>
-                        <img loading="lazy" src="../../public/assets/icons/line.svg" alt="line" />
+                        <img loading="lazy" src="../public/assets/icons/line.svg" alt="line" />
                     </div>
                 </div>
             </div>
@@ -96,31 +98,24 @@
     <div :class='{"layer active":isActive,"layer":!isActive}' @click="toggle"></div>
 </template>
 <script setup>
-    import Cart from '../../public/assets/icons/cart.vue'
-    import ChevronRight from '../../public/assets/icons/Chevron-right.vue'
-</script>
-<script>
-export default {
-    data() {
-        return {
-        isActive: false,
-        categories:['T-shirts', 'Shirts','Pants', 'Shoes','Scarfs','Hats','Accessories','Perfumes', 'Watches'],
-        secondSlide:false,
-        routeData: ''
-        }
-    },
-    methods: {
-        toggle() {
-            this.isActive = !this.isActive;
-        },
-        nextSlide(){
-            this.secondSlide = true
-        },
-        prevSlide(){
-            this.secondSlide = false
-        },
+
+    import Cart from '../public/assets/icons/cart.vue'
+    import ChevronRight from '../public/assets/icons/Chevron-right.vue'
+
+    const isActive = ref(false)
+    const categories = ['T-shirts', 'Shirts','Pants', 'Shoes','Scarfs','Hats','Accessories','Perfumes', 'Watches']
+    const secondSlide = ref(false)
+    const routeData = ref('')
+
+    const toggle = () => {
+        isActive.value = !isActive.value
     }
-    };
+    const nextSlide = () => {
+        secondSlide.value = true 
+    }
+    const prevSlide = () => {
+        secondSlide.value = false
+    }
 </script>
 <style scoped>
     nav {

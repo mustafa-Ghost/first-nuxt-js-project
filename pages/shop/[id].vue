@@ -17,7 +17,12 @@
                         <div @click="changeQuantity(1)">+</div>
                     </div>
                     <div>
-                        <button>Add To Cart</button>
+                        <button @click="addToCart({...product, quantity})">
+                            <div>Add To Cart</div>
+                            <div>
+                                <div :class="{'loading active':isLoading,'loading':!isLoading}"></div>
+                            </div>
+                        </button>
                     </div>
                 </div>
                 <div class="buy-now">
@@ -85,6 +90,40 @@
         </div>
     </main>
 </template>
+<script setup>
+    import InstagramIcon from '../../public/assets/icons/instagram.vue'
+    import FacebookIcon from '../../public/assets/icons/facebook.vue'
+    import WhatsappIcon from '../../public/assets/icons/whatsapp.vue'
+    const {id} = useRoute().params 
+    const {data:product} = await useFetch(`https://fakestoreapi.com/products/${id}`, {
+        key:id
+    })
+
+    const activeAccordions = ref([false, false]);
+    const quantity = ref(1);
+    const isLoading = ref(false)
+    const activate = (index) => {
+        activeAccordions.value[index] = !activeAccordions.value[index];
+    };
+
+    const changeQuantity = (payload) => {
+        if (quantity.value + payload >= 1) {
+            quantity.value += payload;
+        }
+    };
+    const addToCart = async (data) => {
+        isLoading.value = true
+        await useFetch('http://localhost:8000/add-item', {method:'POST', body:data})
+            .then(res => {
+            isLoading.value = false
+                console.log(res.data.value.message)
+            })
+            .catch(err => {
+                isLoading.value = false
+                console.log(err)
+            })
+    }
+</script>
 <style scoped>
     .product-details {
         padding: 5rem 0
@@ -120,6 +159,34 @@
         color: var(--bg);
         background-color: var(--font);
         border: 1px solid var(--font);
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+        justify-content: center;
+    }
+    .product-details .container .add-to-cart button .loading {
+        width:10px;
+        height:11px;
+        border: 2px solid var(--bg);
+        border-radius: 50%;
+        display: block;
+        clip-path: polygon(100% 0%, 0% 0%, 0% 50%, 50% 50%, 50% 100%, 100% 100%);
+        animation: .8s ease loading infinite;
+        display: none
+    }
+    .product-details .container .add-to-cart button .loading.active {
+        display: block;
+    }
+    @keyframes loading {
+        from {
+            transform: rotate(0)
+        }
+        to {
+            transform: rotate(360deg)
+        }
+    }
+    .product-details .container .add-to-cart button:hover {
+        background-color: #161616;
     }
     .product-details .container .add-to-cart .quantity{
         display: grid;
@@ -133,12 +200,18 @@
     .product-details .container button {
         width: 100%;
         font-size: var(--font-size);
-        padding: 1rem
+        padding: 1rem;
+        transition: .5s ease;
     }
     .product-details .container .buy-now button {
         color: var(--bg);
         border: 1px solid var(--primary);
         background-color: var(--primary);
+    }
+    .product-details .container .buy-now button:hover {
+        color: var(--primary);
+        background-color: var(--bg);
+        border-color: var(--bg-3);
     }
     .product-details .container .share {
         display: flex;
@@ -230,33 +303,3 @@
         font-size: var(--font-size);
     }
 </style>
-
-<script setup>
-    import InstagramIcon from '../../public/assets/icons/instagram.vue'
-    import FacebookIcon from '../../public/assets/icons/facebook.vue'
-    import WhatsappIcon from '../../public/assets/icons/whatsapp.vue'
-    const {id} = useRoute().params 
-    const {data:product} = await useFetch(`https://fakestoreapi.com/products/${id}`, {
-        key:id
-    })
-</script>
-<script>
-    export default {
-        data(){
-            return {
-                activeAccordions: [false, false],
-                quantity: 1
-            }
-        },
-        methods: {
-            activate(index){
-                this.activeAccordions[index] = !this.activeAccordions[index]
-            },
-            changeQuantity(payload){
-                if (this.quantity + payload >= 1){
-                    this.quantity+=payload
-                }
-            }
-        }
-    }
-</script>
