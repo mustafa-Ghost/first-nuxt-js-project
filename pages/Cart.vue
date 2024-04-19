@@ -1,5 +1,5 @@
 <template>
-    <main id='cart'>
+    <main id='cart' v-if="isLoaded">
         <div class="container">
             <div class="desc">
                 <NuxtLink to="/">
@@ -27,7 +27,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in products" :key="item._id">
+                            <tr v-for="item in products" :key="item.id">
                                 <td class="details">
                                     <div class="image">
                                         <img loading="lazy" :src='item.image' :alt="item.title"/>
@@ -80,10 +80,17 @@
     </main>
 </template>
 <script setup>
-    const {data:items} = await useFetch('http://localhost:8000/get-data')
-    const products = items.value
     const totals = ref([0,0])
     const total = ref(0)
+    const products = ref([{}])
+    const isLoaded = ref(false)
+    onMounted(() => {
+        const items = localStorage.getItem('items')
+        const cartProducts = JSON.parse(items)
+        products.value = cartProducts
+        console.log(products.value)
+        isLoaded.value = true
+    })
     const itemTotalPrice = computed(() => (quantity, price) => {
         return quantity * price
     });
@@ -92,7 +99,7 @@
         return totalNumber
     });
     const getTotal = computed(() => () => {
-        products.map(product => {
+        products.value.map(product => {
             const productTotal = itemTotalPrice.value(product.quantity, product.price)
             totals.value.push(productTotal)
         })

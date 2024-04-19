@@ -113,15 +113,24 @@
     };
     const addToCart = async (data) => {
         isLoading.value = true
-        await useFetch('http://localhost:8000/add-item', {method:'POST', body:data})
-            .then(res => {
-            isLoading.value = false
-                console.log(res.data.value.message)
-            })
-            .catch(err => {
-                isLoading.value = false
-                console.log(err)
-            })
+        // await useFetch('http://localhost:8000/add-item', {method:'POST', body:data})
+        //     .then(res => {
+        //     isLoading.value = false
+        //         console.log(res.data.value.message)
+        //     })
+        //     .catch(err => {
+        //         isLoading.value = false
+        //         console.log(err)
+        //     })
+        const items = JSON.parse(localStorage.getItem('items')) || [];
+        const index = items.findIndex(item => item.id === data.id);
+        if (index !== -1) {
+            items[index] = data;
+        } else {
+            items.push(data);
+        }
+        localStorage.setItem('items', JSON.stringify(items));
+
     }
 </script>
 <style scoped>
