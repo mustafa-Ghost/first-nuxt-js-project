@@ -38,6 +38,7 @@
 </template>
 <script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/css';
 
 const { data: products } = await useFetch('https://fakestoreapi.com/products');
 
